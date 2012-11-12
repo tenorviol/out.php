@@ -3,10 +3,9 @@
 require_once __DIR__.'/../out.php';
 
 class outTest extends PHPUnit_Framework_TestCase {
-  const REPLACEMENT_CHARACTER = "\xEF\xBF\xBD";
 
   public function utf8Provider() {
-    $R = self::REPLACEMENT_CHARACTER;
+    $R = out\REPLACEMENT_CHARACTER;
     return array(
 
       // valid utf-8 sequences, all edge cases
@@ -179,7 +178,7 @@ sîn vil manegiu tugent michz leisten hiez."),
   }
 
   public function controlProvider() {
-    $R = self::REPLACEMENT_CHARACTER;
+    $R = out\REPLACEMENT_CHARACTER;
 
     // U+007F - U+009F : latin1 control characters (plus for convenience \x7F)
     $latin1 = $latin1_expect = '';
