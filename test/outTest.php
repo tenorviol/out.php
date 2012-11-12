@@ -4,6 +4,35 @@ require_once __DIR__.'/../out.php';
 
 class outTest extends PHPUnit_Framework_TestCase {
 
+  public function outProvider() {
+    $R = out\REPLACEMENT_CHARACTER;
+    return array(
+      array('', 'text', ''),
+      array('', 'raw', ''),
+      array('', 'binary', ''),
+      array('', 'script', ''),
+      array('', 'style', ''),
+      array('', 'cdata', ''),
+      array("<>&'\" \x7F \xFF\n\xC0\x80 </script </style ]]> ", 'text',   "&lt;&gt;&amp;&#039;&quot; $R $R\n$R$R &lt;/script &lt;/style ]]&gt; "),
+      array("<>&'\" \x7F \xFF\n\xC0\x80 </script </style ]]> ", 'raw',    "<>&'\" \x7F $R\n$R$R </script </style ]]> "),
+      array("<>&'\" \x7F \xFF\n\xC0\x80 </script </style ]]> ", 'binary', "<>&'\" \x7F \xFF\n\xC0\x80 </script </style ]]> "),
+      array("<>&'\" \x7F \xFF\n\xC0\x80 </scr ipt </style ]]>", 'script', "<>&'\" \x7F $R\n$R$R </scr ipt </style ]]>"),
+      array("<>&'\" \x7F \xFF\n\xC0\x80 </script </st yle ]]>", 'style',  "<>&'\" \x7F $R\n$R$R </script </st yle ]]>"),
+      array("<>&'\" \x7F \xFF\n\xC0\x80 </script </style ]] >", 'cdata',  "<>&'\" \x7F $R\n$R$R </script </style ]] >"),
+    );
+  }
+
+  /**
+   * @dataProvider outProvider
+   */
+  public function test($s, $func, $expect) {
+    $outfunc = "out\\$func";
+    ob_start();
+    $outfunc($s);
+    $result = ob_get_clean();
+    $this->assertEquals($expect, $result);
+  }
+
   public function utf8Provider() {
     $R = out\REPLACEMENT_CHARACTER;
     return array(
@@ -217,11 +246,11 @@ sîn vil manegiu tugent michz leisten hiez."),
   /**
    * @dataProvider controlProvider
    */
-  public function test_replace_control_chars($s, $expect = null) {
+  public function test_replace_control_characters($s, $expect = null) {
     if ($expect === null) {
       $expect = $s;
     }
-    $result = out\replace_control_chars($s);
+    $result = out\replace_control_characters($s);
     $this->assertEquals($expect, $result, 's='.urlencode($s) . "\nexpect=".urlencode($expect) . "\nresult=".urlencode($result));
   }
 }

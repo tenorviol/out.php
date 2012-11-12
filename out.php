@@ -5,37 +5,38 @@ namespace out;
 const REPLACEMENT_CHARACTER = "\xEF\xBF\xBD";
 
 function text($s) {
-  echo htmlentities($s, ENT_QUOTES, 'UTF-8');
+  $s = replace_control_characters($s);
+  echo htmlentities($s, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8');
 }
 
 function raw($s) {
-  echo htmlentities($s, 0, 'UTF-8');
+  $s = replace_non_utf8($s);
   echo $s;
 }
 
-function bin($s) {
+function binary($s) {
   echo $s;
 }
 
 function script($s) {
-  if (str_pos($s, '</script') !== false) {
+  if (strpos($s, '</script') !== false) {
     throw new RuntimeException('HTML script elements cannot contain "</script"');
   }
-  echo $s;
+  raw($s);
 }
 
 function style($s) {
-  if (str_pos($s, '</style') !== false) {
+  if (strpos($s, '</style') !== false) {
     throw new RuntimeException('HTML style elements cannot contain "</style"');
   }
-  echo $s;
+  raw($s);
 }
 
 function cdata($s) {
-  if (str_pos($s, ']]>') !== false) {
+  if (strpos($s, ']]>') !== false) {
     throw new RuntimeException('CDATA elements cannot contain "]]>"');
   }
-  echo $s;
+  raw($s);
 }
 
 function replace_non_utf8($s) {
@@ -60,7 +61,7 @@ function replace_non_utf8($s) {
   }, $s);
 }
 
-function replace_control_chars($s) {
+function replace_control_characters($s) {
   $re = '/( [\x00-\x08]
           |  \x0B
           | [\x0E-\x1F]
