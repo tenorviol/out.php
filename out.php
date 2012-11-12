@@ -6,9 +6,21 @@ use InvalidArgumentException;
 
 const REPLACEMENT_CHARACTER = "\xEF\xBF\xBD";
 
-function text($s) {
-  $s = replace_control_characters($s);
-  echo htmlentities($s, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8');
+if (defined('ENT_SUBSTITUTE')) {
+
+  function text($s) {
+    $s = replace_control_characters($s);
+    echo htmlentities($s, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8');
+  }
+
+} else {
+
+  function text($s) {
+    $s = replace_control_characters($s);
+    $s = replace_non_utf8($s);
+    echo htmlentities($s, ENT_QUOTES, 'UTF-8');
+  }
+
 }
 
 function raw($s) {
