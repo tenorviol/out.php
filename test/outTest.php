@@ -25,12 +25,33 @@ class outTest extends PHPUnit_Framework_TestCase {
   /**
    * @dataProvider outProvider
    */
-  public function test($s, $func, $expect) {
+  public function testOut($s, $func, $expect) {
     $outfunc = "out\\$func";
     ob_start();
     $outfunc($s);
     $result = ob_get_clean();
     $this->assertEquals($expect, $result);
+  }
+
+  /**
+   * @expectedException InvalidArgumentException
+   */
+  public function testOutScriptThrowsOnInvalidInput() {
+    out\script("\n\t</script ");
+  }
+
+  /**
+   * @expectedException InvalidArgumentException
+   */
+  public function testOutStyleThrowsOnInvalidInput() {
+    out\style("\n\t</style ");
+  }
+
+  /**
+   * @expectedException InvalidArgumentException
+   */
+  public function testOutCdataThrowsOnInvalidInput() {
+    out\cdata("\n\t]]> ");
   }
 
   public function utf8Provider() {

@@ -2,6 +2,8 @@
 
 namespace out;
 
+use InvalidArgumentException;
+
 const REPLACEMENT_CHARACTER = "\xEF\xBF\xBD";
 
 function text($s) {
@@ -20,21 +22,21 @@ function binary($s) {
 
 function script($s) {
   if (strpos($s, '</script') !== false) {
-    throw new RuntimeException('HTML script elements cannot contain "</script"');
+    throw new InvalidArgumentException('HTML script elements cannot contain "</script"');
   }
   raw($s);
 }
 
 function style($s) {
   if (strpos($s, '</style') !== false) {
-    throw new RuntimeException('HTML style elements cannot contain "</style"');
+    throw new InvalidArgumentException('HTML style elements cannot contain "</style"');
   }
   raw($s);
 }
 
 function cdata($s) {
   if (strpos($s, ']]>') !== false) {
-    throw new RuntimeException('CDATA elements cannot contain "]]>"');
+    throw new InvalidArgumentException('CDATA elements cannot contain "]]>"');
   }
   raw($s);
 }
