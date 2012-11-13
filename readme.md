@@ -4,12 +4,36 @@ out.php
 `echo` is evil. It is the exact right way to dump binary data to the output stream.
 Don't use it. Use one of these instead:
 
-* `out\text($s)` to write html-encoded text
-* `out\raw($s)` to write text as-is, including html or whatever
-* `out\binary($s)` to echo binary data
-* `out\script($s)` to write raw text into a script element
-* `out\style($s)` to write raw text into a style element
-* `out\cdata($s)` to write raw text into a cdata element
+* `out\text($s)` write html-encoded text
+* `out\raw($s)` write text as-is, including html or whatever
+* `out\binary($s)` echo binary data
+* `out\script($s)` write raw text into a script element
+* `out\style($s)` write raw text into a style element
+* `out\cdata($s)` write raw text into a cdata element
 
 All functions except binary enforce strict UTF-8 compliance,
-replacing non-utf8 characters with the unicode replacement character U+FFFD
+replacing non-utf8 characters with the unicode replacement character U+FFFD.
+Additionally, `out\text` replaces all non-whitespace control characters.
+
+License
+-------
+
+Copyright (C) 2012 Christopher Johnson
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in
+all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
